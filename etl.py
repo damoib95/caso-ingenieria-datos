@@ -95,16 +95,31 @@ def main():
     for col in cols:
         df = df.filter(F.col(col).isNotNull())
 
-    log.info("Validacion de registros con valores nulos")
+    log.info(f"Registros despues de exclusion de nulos: {df.count()}")
 
     # Aplicacion de reglas de negocio
     tipo_entrega_validos = ["ZPRE", "ZVE1", "Z04", "Z05"]
     df = df.filter(F.col("tipo_entrega").isin(tipo_entrega_validos))
     df = df.filter(F.col("precio") > 0)
     df = df.filter(F.col("cantidad") > 0)
+    df = df.withColumn(
+        "unidades",
+        F.when(F.col("unidad") == "CS", F.col("cantidad") * 20)
+        .otherwise(F.col("cantidad"))
+    )
 
     log.info(f"Registros despues de aplicacion de reglas de negocio: {df.count()}") 
 
+    output_path = cfg.output.base_path
+
+    log.info(f"Guardando datos procesados en: {output_path}")
+    (df.write
+        .mode("overwrite")
+        .option("compression", "snappy")
+        .partitionBy("fecha_proceso")
+        .parquet(output_path)
+    )
+    
     log.info("Ejecucion de ETL finalizada exitosamente")
 
 if __name__ == "__main__":
