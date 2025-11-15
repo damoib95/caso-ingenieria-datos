@@ -1,2 +1,10 @@
 input:
   raw_path: "data/raw/data_entrega_productos.csv"
+
+params:
+  country: "HN"
+  start_date: "2025-01-01"
+  end_date: "2025-06-30"
+
+output:
+  base_path: "data/processed"
