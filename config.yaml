@@ -2,9 +2,26 @@ input:
   raw_path: "data/raw/data_entrega_productos.csv"
 
 params:
-  country: "HN"
+  country: "SV"
   start_date: "2025-01-01"
   end_date: "2025-06-30"
 
 output:
   base_path: "data/processed"
+
+thresholds:
+  unidades:
+    EC: {'q50': 600.0}
+    GT: {'q50': 300.0}
+    HN: {'q50': 200.0}
+    JM: {'q50': 700.0}
+    PE: {'q50': 102.5}
+    SV: {'q50': 40.0}
+
+  precio:
+    EC: {'q50': 222.75}
+    GT: {'q50': 1033.745}
+    HN: {'q50': 2200.0}
+    JM: {'q50': 62935.065}
+    PE: {'q50': 146.25}
+    SV: {'q50': 18.0}
