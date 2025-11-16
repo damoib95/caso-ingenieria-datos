@@ -27,21 +27,20 @@ data/processed/
 
 ```mermaid
 flowchart TD
-    A[Lectura CSV<br>con esquema definido] 
-      --> B[Renombre de columnas<br>cod_*, id_*]
-    B --> C[Conversión de fecha<br>to_date(fecha_proceso)]
-    C --> D[Normalización de textos<br>trim + upper en campos clave]
-    D --> E[Filtros configurables<br>- país<br>- rango de fechas]
-    E --> F[Eliminación de nulos<br>columnas críticas que no aceptan NULL]
-    F --> G[Validaciones<br>- tipo_entrega válido<br>- precio > 0<br>- cantidad > 0]
-    G --> H[Conversión de unidades<br>CS → cantidad*20]
-    H --> I[Creación de indicadores<br>flags zpre, zve1, z04, z05]
-    I --> J[Columnas descriptivas<br>pais_desc, unidad_desc, tipo_entrega_desc]
-    J --> K[Campos derivados de fecha<br>anio, mes, semana, día_semana]
-    K --> L[Rangos basados en thresholds<br>rango_precio, rango_unidades]
-    L --> M[Marca temporal<br>fecha_ejecucion]
+    A[Lectura CSV con esquema] --> B[Renombre de columnas cod_*, id_*]
+    B --> C[Conversion de fecha a formato estandar]
+    C --> D[Normalizacion de texto en columnas clave]
+    D --> E[Filtros por pais y rango de fechas]
+    E --> F[Eliminacion de nulos en columnas criticas]
+    F --> G[Validaciones de negocio: tipo_entrega, precio y cantidad]
+    G --> H[Unificacion de unidades CS a unidades]
+    H --> I[Creacion de flags zpre, zve1, z04, z05]
+    I --> J[Columnas descriptivas: pais, unidad, tipo_entrega]
+    J --> K[Campos derivados de fecha: anio, mes, semana, dia_semana]
+    K --> L[Rangos de precio y unidades segun thresholds]
+    L --> M[Marca temporal de ejecucion]
     M --> N[Reordenamiento final de columnas]
-    N --> O[Exportación Parquet<br>particionado por fecha_proceso]
+    N --> O[Exportacion a Parquet particionado por fecha_proceso]
 ```
 
 El proceso inicia con la lectura del archivo CSV original.  
