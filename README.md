@@ -26,6 +26,7 @@ data/processed/
 ## Flujo del ETL
 
 ```mermaid
+flowchart TD
     A[Lectura CSV<br>con esquema definido] 
       --> B[Renombre de columnas<br>cod_*, id_*]
     B --> C[Conversión de fecha<br>to_date(fecha_proceso)]
