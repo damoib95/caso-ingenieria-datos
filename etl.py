@@ -247,10 +247,6 @@ def main():
         .parquet(output_path)
     )
 
-    pdf = df.limit(10000).toPandas()
-    excel_output = os.path.join(output_path, f"preview_etl_{ts}.xlsx")
-    pdf.to_excel(excel_output, index=False)
-
     log.info("Ejecucion de ETL finalizada exitosamente")
 
 if __name__ == "__main__":
