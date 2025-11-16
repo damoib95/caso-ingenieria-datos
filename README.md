@@ -26,15 +26,21 @@ data/processed/
 ## Flujo del ETL
 
 ```mermaid
-flowchart TD
-    A[Lectura CSV] --> B[Normalización y renombre]
-    B --> C[Conversión de fecha de proceso]
-    C --> D[Filtros<br>- país<br>- rango de fechas]
-    D --> E[Limpieza de datos]
-    E --> F[Aplicación de reglas de negocio]
-    F --> G[Adición de columnas adicionales]
-    G --> H[Reordenamiento de columnas]
-    H --> I[Exportación<br>Parquet particionado por fecha_proceso]
+    A[Lectura CSV<br>con esquema definido] 
+      --> B[Renombre de columnas<br>cod_*, id_*]
+    B --> C[Conversión de fecha<br>to_date(fecha_proceso)]
+    C --> D[Normalización de textos<br>trim + upper en campos clave]
+    D --> E[Filtros configurables<br>- país<br>- rango de fechas]
+    E --> F[Eliminación de nulos<br>columnas críticas que no aceptan NULL]
+    F --> G[Validaciones<br>- tipo_entrega válido<br>- precio > 0<br>- cantidad > 0]
+    G --> H[Conversión de unidades<br>CS → cantidad*20]
+    H --> I[Creación de indicadores<br>flags zpre, zve1, z04, z05]
+    I --> J[Columnas descriptivas<br>pais_desc, unidad_desc, tipo_entrega_desc]
+    J --> K[Campos derivados de fecha<br>anio, mes, semana, día_semana]
+    K --> L[Rangos basados en thresholds<br>rango_precio, rango_unidades]
+    L --> M[Marca temporal<br>fecha_ejecucion]
+    M --> N[Reordenamiento final de columnas]
+    N --> O[Exportación Parquet<br>particionado por fecha_proceso]
 ```
 
 El proceso inicia con la lectura del archivo CSV original.  
